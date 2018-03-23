@@ -3,6 +3,8 @@ package job;
 import akka.actor.AbstractLoggingActor;
 import akka.actor.ActorRef;
 import akka.actor.Props;
+import akka.event.Logging;
+import akka.event.LoggingAdapter;
 import job.types.FBJob;
 import job.types.InstaJob;
 import job.types.Job;
@@ -21,20 +23,26 @@ public class ParentActor extends AbstractLoggingActor {
     // we can separate jobs here
     @Override
     public Receive createReceive() {
+        log().info("On create method");
         return receiveBuilder()
-                .match(Job.class, this::doWithInsta)
+                .match(InstaJob.class, this::doWithInsta)
                 .match(FBJob.class, this::doWithFb)
+                .matchAny(this::error)
                 .build();
     }
 
+    private void error(Object o) {
+        log().error("ERROR " + o.toString());
+    }
+
     private void doWithFb(FBJob job) {
-        System.out.println("On parent FBJOB");
+       log().info("On parent FBJOB");
         childActorRef.tell(job, getSelf());
     }
 
     // this method will send to next component (child actor)
-    private void doWithInsta(Job job) {
-        System.out.println("ON PARENT SENDING TO CHILD Instagram job");
+    private void doWithInsta(InstaJob job) {
+        log().debug("ON PARENT SENDING TO CHILD Instagram job");
         childActorRef.tell(job, getSelf());
     }
 }

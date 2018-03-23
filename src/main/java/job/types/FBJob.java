@@ -7,4 +7,5 @@ public class FBJob extends Job {
     public FBJob(String type) {
         super(type);
     }
+    public FBJob(){}
 }

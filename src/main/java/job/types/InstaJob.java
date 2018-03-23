@@ -7,4 +7,5 @@ public class InstaJob extends Job {
     public InstaJob(String type) {
         super(type);
     }
+    public InstaJob(){}
 }

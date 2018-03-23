@@ -3,6 +3,7 @@ package job;
 import akka.actor.AbstractLoggingActor;
 import akka.actor.ActorRef;
 import akka.actor.Props;
+import job.types.FBJob;
 import job.types.InstaJob;
 import job.types.Job;
 
@@ -14,7 +15,7 @@ public class ChildActor extends AbstractLoggingActor{
     @Override
     public Receive createReceive() {
         return receiveBuilder()
-                .match(Job.class, this::doWork)
+                .match(InstaJob.class, this::doWork)
                 .matchAny(this::reply)
                 .build();
     }
